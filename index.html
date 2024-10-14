@@ -1,0 +1,318 @@
+use ZenClassProgramme
+
+//users
+
+db.createCollection("users")
+
+db.users.insertMany([
+{
+name: "Alice",
+email: "alice@example.com",
+mentor_id: ObjectId("617c1f77e48b2b6f3c9d3f0a"),
+attendance: [
+{ date: ISODate("2023-10-01"), status: "present" },
+{ date: ISODate("2023-10-02"), status: "absent" }
+],
+tasks_submitted: [
+{ task_id: ObjectId("617c1f77e48b2b6f3c9d3f1b"), date: ISODate("2023-10-01"), status: "submitted" },
+{ task_id: ObjectId("617c1f77e48b2b6f3c9d3f1c"), date: ISODate("2023-10-02"), status: "not submitted" }
+]
+},
+{
+name: "Bob",
+email: "bob@example.com",
+mentor_id: ObjectId("617c1f77e48b2b6f3c9d3f0a"),
+attendance: [
+{ date: ISODate("2023-10-01"), status: "present" },
+{ date: ISODate("2023-10-03"), status: "present" }
+],
+tasks_submitted: [
+{ task_id: ObjectId("617c1f77e48b2b6f3c9d3f1b"), date: ISODate("2023-10-01"), status: "submitted" },
+{ task_id: ObjectId("617c1f77e48b2b6f3c9d3f1d"), date: ISODate("2023-10-03"), status: "submitted" }
+]
+}
+])
+{
+acknowledged: true,
+insertedIds: {
+'0': ObjectId('670cb776bc96d9153c9d61fe'),
+'1': ObjectId('670cb776bc96d9153c9d61ff')
+}
+}
+
+
+
+//codekata
+
+db.createCollection("codekata")
+
+db.codekata.insertMany([
+{ user_id: ObjectId("617c1f77e48b2b6f3c9d3f01"), problems_solved: 50 },
+{ user_id: ObjectId("617c1f77e48b2b6f3c9d3f02"), problems_solved: 75 }
+])
+{
+acknowledged: true,
+insertedIds: {
+'0': ObjectId('670cb7d2bc96d9153c9d6200'),
+'1': ObjectId('670cb7d2bc96d9153c9d6201')
+}
+}
+
+
+
+//attendance
+
+db.createCollection("attendance")
+
+db.attendance.insertMany([
+{ user_id: ObjectId("617c1f77e48b2b6f3c9d3f01"), date: ISODate("2023-10-01"), status: "present" },
+{ user_id: ObjectId("617c1f77e48b2b6f3c9d3f02"), date: ISODate("2023-10-01"), status: "absent" }
+])
+{
+acknowledged: true,
+insertedIds: {
+'0': ObjectId('670cb804bc96d9153c9d6202'),
+'1': ObjectId('670cb804bc96d9153c9d6203')
+}
+}
+
+
+
+
+//topics
+
+db.createCollection("topics")
+
+db.topics.insertMany([
+{ topic_name: "Introduction to JavaScript", date: ISODate("2023-10-01") },
+{ topic_name: "Advanced CSS", date: ISODate("2023-10-05") }
+])
+{
+acknowledged: true,
+insertedIds: {
+'0': ObjectId('670cb811bc96d9153c9d6204'),
+'1': ObjectId('670cb811bc96d9153c9d6205')
+}
+}
+
+
+
+
+//tasks
+db.createCollection("tasks")
+
+db.tasks.insertMany([
+{ task_name: "JavaScript Basics Task", date: ISODate("2023-10-01"), topic_id: ObjectId("617c1f77e48b2b6f3c9d3f1a") },
+{ task_name: "CSS Flexbox Task", date: ISODate("2023-10-05"), topic_id: ObjectId("617c1f77e48b2b6f3c9d3f1b") }
+])
+{
+acknowledged: true,
+insertedIds: {
+'0': ObjectId('670cb81bbc96d9153c9d6206'),
+'1': ObjectId('670cb81bbc96d9153c9d6207')
+}
+}
+
+
+
+
+//company_drives
+
+db.createCollection("company_drives")
+
+db.company_drives.insertMany([
+{ company_name: "Tech Corp", date: ISODate("2020-10-16") },
+{ company_name: "InnoTech", date: ISODate("2020-10-30") }
+])
+{
+acknowledged: true,
+insertedIds: {
+'0': ObjectId('670cb823bc96d9153c9d6208'),
+'1': ObjectId('670cb823bc96d9153c9d6209')
+}
+}
+
+
+
+//mentors
+
+db.createCollection("mentors")
+
+db.mentors.insertMany([
+{ name: "John Doe", mentee_count: 20 },
+{ name: "Jane Smith", mentee_count: 10 }
+])
+{
+acknowledged: true,
+insertedIds: {
+'0': ObjectId('670cb82fbc96d9153c9d620a'),
+'1': ObjectId('670cb82fbc96d9153c9d620b')
+}
+}
+
+
+//1. Find all the topics and tasks which are taught in the month of October
+
+// Topics in October
+db.topics.find({
+date: {
+$gte: ISODate("2023-10-01T00:00:00Z"),
+$lt: ISODate("2023-11-01T00:00:00Z")
+}
+})
+
+// Tasks in October
+db.tasks.find({
+date: {
+$gte: ISODate("2023-10-01T00:00:00Z"),
+$lt: ISODate("2023-11-01T00:00:00Z")
+}
+})
+{
+_id: ObjectId('670cb81bbc96d9153c9d6206'),
+task_name: 'JavaScript Basics Task',
+date: 2023-10-01T00:00:00.000Z,
+topic_id: ObjectId('617c1f77e48b2b6f3c9d3f1a')
+}
+{
+_id: ObjectId('670cb81bbc96d9153c9d6207'),
+task_name: 'CSS Flexbox Task',
+date: 2023-10-05T00:00:00.000Z,
+topic_id: ObjectId('617c1f77e48b2b6f3c9d3f1b')
+}
+
+
+
+//2. Find all the company drives which appeared between 15-Oct-2020 and 31-Oct-2020
+
+db.company_drives.find({
+date: {
+$gte: ISODate("2020-10-15T00:00:00Z"),
+$lte: ISODate("2020-10-31T23:59:59Z")
+}
+})
+{
+_id: ObjectId('670cb823bc96d9153c9d6208'),
+company_name: 'Tech Corp',
+date: 2020-10-16T00:00:00.000Z
+}
+{
+_id: ObjectId('670cb823bc96d9153c9d6209'),
+company_name: 'InnoTech',
+date: 2020-10-30T00:00:00.000Z
+}
+
+
+
+//3. Find all the company drives and students who appeared for the placement
+
+db.company_drives.aggregate([
+{
+$lookup: {
+from: "users",
+localField: "student_ids", // Assuming student_ids is an array in company_drives
+foreignField: "_id",
+as: "students"
+}
+},
+{
+$project: {
+company_name: 1,
+date: 1,
+"students.name": 1,
+"students.email": 1
+}
+}
+])
+{
+_id: ObjectId('670cb823bc96d9153c9d6208'),
+company_name: 'Tech Corp',
+date: 2020-10-16T00:00:00.000Z,
+students: []
+}
+{
+_id: ObjectId('670cb823bc96d9153c9d6209'),
+company_name: 'InnoTech',
+date: 2020-10-30T00:00:00.000Z,
+students: []
+}
+
+
+//4. Find the number of problems solved by each user in Codekata
+
+db.codekata.aggregate([
+{
+$group: {
+_id: "$user_id",
+total_problems_solved: { $sum: "$problems_solved" }
+}
+},
+{
+$lookup: {
+from: "users",
+localField: "_id",
+foreignField: "_id",
+as: "user_info"
+}
+},
+{
+$project: {
+"user_info.name": 1,
+total_problems_solved: 1
+}
+}
+])
+{
+_id: ObjectId('617c1f77e48b2b6f3c9d3f02'),
+total_problems_solved: 75,
+user_info: []
+}
+{
+_id: ObjectId('617c1f77e48b2b6f3c9d3f01'),
+total_problems_solved: 50,
+user_info: []
+}
+
+
+//5. Find all mentors with more than 15 mentees
+
+db.mentors.find({
+mentee_count: { $gt: 15 }
+})
+{
+_id: ObjectId('670cb82fbc96d9153c9d620a'),
+name: 'John Doe',
+mentee_count: 20
+}
+
+
+
+//6. Find the number of users who are absent and did not submit tasks between 15-Oct-2020 and 31-Oct-2020
+
+db.users.aggregate([
+{
+$match: {
+attendance: {
+$elemMatch: {
+date: {
+$gte: ISODate("2020-10-15T00:00:00Z"),
+$lte: ISODate("2020-10-31T23:59:59Z")
+},
+status: "absent"
+}
+},
+tasks_submitted: {
+$elemMatch: {
+date: {
+$gte: ISODate("2020-10-15T00:00:00Z"),
+$lte: ISODate("2020-10-31T23:59:59Z")
+},
+status: "not submitted"
+}
+}
+}
+},
+{
+$count: "users_absent_and_task_not_submitted"
+}
+])
